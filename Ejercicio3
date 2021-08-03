@@ -1,0 +1,142 @@
+using System;
+using System.Collections; 
+
+namespace ejercicio3
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+
+		/**	Cuenta c1 = new Cuenta();
+			c1.Depositar(100).Depositar(50).Extraer(120).Extraer(50);
+			Cuenta c2 = new Cuenta();
+			c2.Depositar(200).Depositar(800);
+			new Cuenta().Depositar(20).Extraer(20);
+			c2.Extraer(1000).Extraer(1);
+			Console.WriteLine("\nDETALLE");
+			Cuenta.ImprimirDetalle();**/
+
+			new Cuenta();
+			new Cuenta();
+
+			ArrayList cuentas = Cuenta.GetCuentas;
+			
+			// se recuperó la lista de cuentas creadas
+			(cuentas[0] as Cuenta).Depositar(50);
+			// se depositó 50 en la primera cuenta de la lista devuelta
+			cuentas.RemoveAt(0);
+			Console.WriteLine(cuentas.Count);
+			// se borró un elemento de la lista devuelta
+			// pero la clase Cuenta sigue manteniendo todos
+			// los datos "La cuenta id: 1 tiene 50 de saldo"
+			
+			cuentas = Cuenta.GetCuentas;
+			Console.WriteLine(cuentas.Count);
+			
+			// se recupera nuevamente la lista de cuentas
+			(cuentas[0] as Cuenta).Extraer(30);
+			//se extrae 25 de la cuenta id: 1 que tenía 50 de saldo
+
+
+
+
+
+
+            Console.WriteLine("\nHello World!");
+			Console.ReadLine();
+        }
+    }
+    class Cuenta {
+
+	public static int NroCta {get; set;} 
+	private static int s_depositos = 0; 
+	private static int s_extracciones= 0; 
+	private static int s_totalDepositado = 0; 
+	private static int s_totalExtraido = 0; 
+	private static int s_rechazos = 0; 
+	private static int s_saldo = 0; 
+
+	
+	private static ArrayList s_arreglo = new ArrayList(); 
+
+	public int Id {get;} 
+
+	private int _montoActual; 
+
+	public int Saldo {
+		get => _montoActual;
+		
+ 		set => _montoActual = value; 
+		
+	} 
+
+
+	public Cuenta(){
+		NroCta++; 
+		Id = NroCta; 
+		Console.WriteLine ($"Se creó la cuenta ID = {Id}"); 
+		
+		Cuenta.s_arreglo.Add(this);
+	}
+
+	public Cuenta Depositar(int unMonto){
+
+		Saldo += unMonto; 
+		Cuenta.s_depositos ++; 
+		Cuenta.s_totalDepositado += unMonto; 
+		Console.WriteLine($"Se deposito {unMonto} en la cuenta {this.Id} (Saldo = {Saldo})");
+		return this;
+	}
+	public Cuenta Extraer(int unMonto){
+		
+		Saldo -= unMonto; 
+		if (Saldo < 0){
+			Cuenta.s_rechazos ++; 
+			Console.WriteLine("Operacion Denegada- Saldo Insuficiente");
+			}
+		else {
+			Cuenta.s_extracciones ++;
+			Cuenta.s_totalExtraido += unMonto; 
+			Console.WriteLine ($"Se extrajo {unMonto} en la cuenta {Id} (Saldo = {Saldo})"); 
+		
+			}		 
+		return this; 
+	
+	}
+
+	public static void ImprimirDetalle(){
+		// Console.WriteLine("{0,-20} {1,5}\n", "Name", "Hours");
+		Cuenta.s_saldo = Cuenta.s_totalDepositado - Cuenta.s_totalExtraido; 
+		Console.WriteLine(
+			"CUENTAS CREADAS: {0,5}\n"+
+			"DEPÓSITOS:       {1,5}	-Total depositado: {2,8}\n"+
+			"EXTRACCIONES:    {3,5}	-Total extraido:   {4,8}\n"+
+			"                        -Saldo             {5,8}\n",
+Cuenta.NroCta, Cuenta.s_depositos, Cuenta.s_totalDepositado, Cuenta.s_extracciones, Cuenta.s_totalExtraido, Cuenta.s_saldo); 
+		
+		Console.WriteLine ("\n *Se denegaron {0} extracciones por falta de fondos", Cuenta.s_rechazos); 
+	
+	} 
+
+	/**public static ArrayList GetCuentas(){
+		ArrayList aux = new ArrayList();
+		foreach (Object o in Cuenta.s_arreglo){ aux.Add(o);} 		
+		return aux ; 
+		}
+	**/
+	
+	
+	
+	public static ArrayList GetCuentas{ 
+		get => Cuenta.s_arreglo.Clone() as ArrayList; 
+	}
+
+
+
+
+
+
+
+}//finDeCuenta
+}
