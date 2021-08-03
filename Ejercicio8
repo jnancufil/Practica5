@@ -1,0 +1,181 @@
+/**
+// When you use foreach to enumerate hash table elements,
+        // the elements are retrieved as KeyValuePair objects.
+        Console.WriteLine();
+        foreach( DictionaryEntry de in openWith )
+        {
+            Console.WriteLine("Key = {0}, Value = {1}", de.Key, de.Value);
+        }
+**/
+using System;
+using System.Collections; 
+
+namespace ejercicio8
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            ListaDePersonas lista = new ListaDePersonas(); 
+            //String unNombre, char gen, int unDni, DateTime unaFecha
+            //new DateTime(1992,4,7)
+
+            lista.Agregar(new Persona("juanchi", 'f', 12345689, new DateTime(1992,4,7) ));
+            lista.Agregar(new Persona("maria", 'f', 12887568, new DateTime(1992,6,22) ));
+            lista.Agregar(new Persona("Fernanda", 'f', 12388868, new DateTime(1985,5,27) ));
+            lista.Agregar(new Persona( "juliana", 'f', 1234789568, new DateTime(1975,1,9) ));
+            lista.Agregar(new Persona("jorgelina", 'f', 1234568, new DateTime(1990,8,4) ));
+
+           // lista.imprimir();
+
+            Persona uno = lista[1234789568];  
+
+
+            if (uno != null) Console.WriteLine(uno.toString());
+            else Console.WriteLine("No existe una persona con ese dni"); 
+
+
+            Array arreglo = lista['F'];
+
+            Console.WriteLine();
+
+            foreach (string p in arreglo) 
+                 Console.WriteLine(p+"\n");   
+
+
+
+
+
+            Console.WriteLine("Hello World!");
+            Console.ReadLine(); 
+        }
+    }
+   class ListaDePersonas
+{
+    private Hashtable ht = new Hashtable();
+    public void Agregar(Persona p)
+        {
+            ht[p.DNI] = p;
+        }
+
+
+//if (!openWith.ContainsKey("doc"))
+/**
+Completarla agregando dos indizadores de sólo lectura
+Un índice entero que permite acceder a las personas de la lista por número de documento. Por
+ejemplo p=lista[30456345] devuelve el objeto Persona que tiene DNI=30456345 o null en caso
+que no exista en la lista.
+Un índice de tipo char que devuelve un arreglo de strings con todos los nombres de las personas de
+la lista que comienzan con el carácter índice. Por ejemplo arreglo=lista['L'] devuelve todos los
+nombres de las personas que comienzan con L
+**/
+
+    public Persona this[int unDNI]{
+        get{
+            if (ht.ContainsKey(unDNI)) 
+                return (Persona)ht[unDNI]; 
+            else 
+                return null; 
+
+        }
+
+    }
+    public string[] this [char unaLetra]{
+        get{
+            string[] arreglo = new string[ht.Count]; 
+            string aux; 
+            int i = 0; 
+            foreach (DictionaryEntry db in ht) {
+                aux = devolverNombre((Persona)db.Value, unaLetra);
+                if (aux != "cteCtrl"){
+                    arreglo[i] = aux;
+                    i++; 
+                }
+            }
+            return arreglo; 
+
+        }
+    }
+    private static string devolverNombre(Persona unDato, char unChar){
+        if (unDato.Nombre[0] == unChar) {
+            return unDato.Nombre; 
+        }
+        else return "cteCtrl";  
+
+    }
+
+    public void imprimir(){
+        foreach (DictionaryEntry db in ht){
+            Persona aux  = (Persona) db.Value; 
+            Console.WriteLine(aux.Nombre +"\n" ); 
+        }
+
+           }
+
+
+
+
+
+
+
+}
+class Persona{
+        /**7) Definir la clase Persona con las siguientes propiedades de lectura y escritura: Nombre de tipo
+string, Sexo de tipo char, DNI de tipo int, y FechaNacimiento de tipo DateTime. Además
+definir una propiedad de sólo lectura (calculada) Edad de tipo int. Definir un indizador de
+lectura/escritura que permita acceder a las propiedades a través de un índice entero. Así, si p es un
+objeto Persona, con p[0] se accede al nombre, p[1] al sexo p[2] al DNI, p[3] a la fecha de
+nacimiento y p[4] a la edad. En caso de asignar p[4] simplemente el valor es descartado. Observar
+que el tipo del indizador debe ser capaz almacenar valores de tipo int, char, DateTime y string.**/
+
+        public string Nombre{get; set;}
+
+        public char Sexo{get; set; }
+
+        public int DNI {get; set;}
+
+        public DateTime FechaNacimiento{get; set; }
+
+        public int Edad {
+            get{
+                DateTime actual = DateTime.Now; 
+                int edad = actual.Year - FechaNacimiento.Year; 
+                return edad; 
+            }}
+
+        public Persona(String unNombre, char gen, int unDni, DateTime unaFecha){
+                Nombre = unNombre; 
+                Sexo = gen; 
+                DNI = unDni; 
+                FechaNacimiento = unaFecha; 
+        }//Constructor agregado para facilidad del Ejercicio8
+
+       public Object this[int i]{
+            get{
+                if (i == 0) return  Nombre; 
+                else if (i == 1) return  Sexo; 
+                else if (i ==2) return DNI;
+                else if (i == 3) return FechaNacimiento;
+                else return Edad; 
+               
+                
+            }
+            set{
+                if (i == 0) Nombre = (string)value; 
+                else if (i == 1) Sexo = (char)value; 
+                else if (i ==2) DNI = (int)value;
+                else if (i == 3) FechaNacimiento = (DateTime)value;  
+            } 
+        }
+
+
+        public string toString(){
+            string aux = $"Nombre: {Nombre}\n Sexo: { Sexo } \n DNI: { DNI }\n Fecha de Nacimiento: {FechaNacimiento}\n Edad: {Edad}\n"; 
+            return aux;
+            }
+
+
+
+    }
+
+}
